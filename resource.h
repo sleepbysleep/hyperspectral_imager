@@ -19,9 +19,11 @@
 #define IDC_EDIT1                       1007
 #define IDC_EDIT_XCOORD                 1007
 #define IDC_EDIT_EXP                    1007
+#define IDC_EDIT_ACC                    1007
 #define IDC_EDIT2                       1008
 #define IDC_EDIT_YCOORD                 1008
 #define IDC_EDIT_POS                    1008
+#define IDC_EDIT_VELOCITY               1008
 #define IDC_STATIC_XYCOORD              1009
 #define IDC_SPIN1                       1010
 #define IDC_SPIN_XCOORD                 1010
@@ -42,6 +44,11 @@
 #define IDC_SLIDER_POS                  1028
 #define IDC_SPIN2                       1029
 #define IDC_SPIN_POS                    1029
+#define IDC_COMBO_STAGE                 1031
+#define IDC_BUTTON3                     1032
+#define IDC_STATIC_STAGE                1033
+#define IDC_EDIT3                       1034
+#define IDC_EDIT_HOME_V                 1034
 
 // Next default values for new objects
 // 
@@ -49,7 +56,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1030
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

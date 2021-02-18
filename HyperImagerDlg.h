@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Graph.h"
+//#include "Graph.h"
 #include "PictureCtrl.h"
 
 #include "CTabHardware.h"

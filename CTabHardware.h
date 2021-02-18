@@ -1,6 +1,12 @@
 #pragma once
 
 
+#define POLLING_MS     100 // [ms]
+#define ACCELATION     100 
+#define MAX_VELOCITY   100 // []
+#define HOME_VELOCITY  100
+
+
 // CTabHardware dialog
 
 class CTabHardware : public CDialogEx
@@ -20,4 +26,16 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
+
+	char serialNo[9] = { 0, };
+	int position = 0;
+	int velocity = 0;
+	bool linearStageOpened = false;
+
+public:
+	virtual BOOL OnInitDialog();
+	CComboBox linearStageList;
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
 };

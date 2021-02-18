@@ -9,7 +9,7 @@
 #include "afxdialogex.h"
 
 #include "envi.h"
-#include "Graph.h"
+//#include "Graph.h"
 
 #include "CTabHardware.h"
 #include "CTabStream.h"
@@ -146,11 +146,14 @@ BOOL CHyperImagerDlg::OnInitDialog()
 	m_sectionTab.GetClientRect(&rect);
 
 	m_hwDlg.Create(IDD_DIALOG_HW, &m_sectionTab);
-	m_hwDlg.SetWindowPos(NULL, 1, 26, rect.Width() - 4, rect.Height() - 28, SWP_SHOWWINDOW | SWP_NOZORDER);
+	m_hwDlg.SetWindowPos(NULL, 12, 33, rect.Width() - 4, rect.Height() - 25, SWP_SHOWWINDOW | SWP_NOZORDER);
+	m_hwDlg.SetParent(this);
 	m_pwndShow = &m_hwDlg;
 
 	m_streamDlg.Create(IDD_DIALOG_STREAM, &m_sectionTab);
-	m_streamDlg.SetWindowPos(NULL, 1, 26, rect.Width() - 4, rect.Height() - 28, /*SWP_SHOWWINDOW |*/ SWP_NOZORDER);
+	m_streamDlg.SetWindowPos(NULL, 12, 33, rect.Width() - 4, rect.Height() - 25, /*SWP_SHOWWINDOW |*/ SWP_NOZORDER);
+	m_streamDlg.SetParent(this);
+
 	//m_streamDlg.m_streamCtrl.Load(CString(_T("D:\\Workspace\\HyperImager\\HyperImager\\lena_opencv_gray.jpg")));
 	//m_pwndShow = &m_streamDlg;
 	unsigned char *buffer = new unsigned char[640 * 480];
@@ -160,8 +163,10 @@ BOOL CHyperImagerDlg::OnInitDialog()
 	delete[] buffer;
 
 	m_hcubeDlg.Create(IDD_DIALOG_HCUBE, &m_sectionTab);
-	m_hcubeDlg.SetWindowPos(NULL, 1, 26, rect.Width() - 4, rect.Height() - 28, /*SWP_SHOWWINDOW |*/ SWP_NOZORDER);
+	m_hcubeDlg.SetWindowPos(NULL, 12, 33, rect.Width() - 4, rect.Height() - 25, /*SWP_SHOWWINDOW |*/ SWP_NOZORDER);
+	m_hcubeDlg.SetParent(this);
 	//m_pwndShow = &m_hcubeDlg;
+
 	m_hcubeDlg.setHCubeDimension(640, 1000, 480);
 	float w_labels[480];
 	for (int i = 0; i < 480; ++i) w_labels[i] = i;
