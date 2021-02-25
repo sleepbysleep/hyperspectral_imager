@@ -15,6 +15,8 @@
 #include "CTabStream.h"
 #include "CTabHyperCube.h"
 
+#include <Thorlabs.MotionControl.IntegratedStepperMotors.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -55,7 +57,7 @@ END_MESSAGE_MAP()
 UINT streamingThread(LPVOID lParam)
 {
 	CHyperImagerDlg *pDlg = (CHyperImagerDlg *)lParam;
-	UINT ret;
+	UINT ret = 0;
 
 	HANDLE pEvent = (pDlg->m_imageRequestEvent);
 
@@ -91,6 +93,13 @@ void CHyperImagerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_TAB_SECTION, m_sectionTab);
+	DDX_Control(pDX, IDC_SLIDER_POS, linearStagePosSlider);
+	DDX_Control(pDX, IDC_EDIT_POS, linearStagePosEdit);
+	DDX_Control(pDX, IDC_SPIN_POS, linearStagePosSpin);
+	DDX_Control(pDX, IDC_SLIDER_EXP, cameraExpSlider);
+	DDX_Control(pDX, IDC_EDIT_EXP, cameraExpEdit);
+	DDX_Control(pDX, IDC_SPIN_EXP, cameraExpSpin);
+	DDX_Control(pDX, IDC_STATIC_POS, linearStagePosStatic);
 }
 
 BEGIN_MESSAGE_MAP(CHyperImagerDlg, CDialogEx)
@@ -193,12 +202,17 @@ BOOL CHyperImagerDlg::OnInitDialog()
 		SetIcon(AfxGetApp()->LoadIcon(IDR_MAINFRAME),
 			FALSE));
 	*/
+	this->linearStagePosSlider.SetRange(0, 100);
+	this->linearStagePosSlider.SetPos(0);
+	//this->linearStagePosSlider.EnableWindow(FALSE);
+	this->linearStagePosEdit.SetWindowTextW(_T("0"));
+	/*
 	CSliderCtrl *slider = (CSliderCtrl *)GetDlgItem(IDC_SLIDER_EXP);
 	slider->SetRange(0, 100);
 	slider->SetPos(0);
 	GetDlgItem(IDC_EDIT_EXP)->SetWindowTextW(_T("0"));
-
-	slider = (CSliderCtrl *)GetDlgItem(IDC_SLIDER_POS);
+	*/
+	CSliderCtrl *slider = (CSliderCtrl *)GetDlgItem(IDC_SLIDER_POS);
 	slider->SetRange(0, 100);
 	slider->SetPos(0);
 	GetDlgItem(IDC_EDIT_POS)->SetWindowTextW(_T("0"));
@@ -355,13 +369,27 @@ void CHyperImagerDlg::OnDeltaposSpinPos(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: Add your control notification handler code here
-	int exp = GetDlgItemInt(IDC_EDIT_POS);
-	int value = exp + pNMUpDown->iDelta;
+	int pos = GetDlgItemInt(IDC_EDIT_POS);
 
-	CSliderCtrl *slider = (CSliderCtrl *)GetDlgItem(IDC_SLIDER_POS);
-	if (value >= slider->GetRangeMin() && value <= slider->GetRangeMax()) {
-		SetDlgItemInt(IDC_EDIT_POS, value);
-		slider->SetPos(value);
+	int new_pos;
+	CSliderCtrl* slider = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_POS);
+	if (pNMUpDown->iDelta > 0) {
+		new_pos = min(pos + this->m_hwDlg.unitStep, slider->GetRangeMax());
+	} else {
+		new_pos = max(pos - this->m_hwDlg.unitStep, slider->GetRangeMin());
+	}
+
+	if (pos != new_pos) {
+		SetDlgItemInt(IDC_EDIT_POS, new_pos);
+		slider->SetPos(new_pos);
+
+		double real_pos;
+		ISC_GetRealValueFromDeviceUnit(this->m_hwDlg.serialNo, new_pos, &real_pos, 0); // 0: distance, 1: velocity, 2:accerleration
+		
+		CString s;
+		s.Format(_T("Linear Stage : %.3f [mm]"), real_pos);
+		GetDlgItem(IDC_STATIC_POS)->SetWindowTextW(s);
+
 		// TODO: set the position of linear stage
 	}
 	*pResult = 0;
@@ -376,6 +404,18 @@ void CHyperImagerDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		CString s;
 		s.Format(_T("%d"), slider->GetPos());
 		GetDlgItem(IDC_EDIT_EXP)->SetWindowTextW(s);
+	}
+
+	if (IDC_SLIDER_POS == pScrollBar->GetDlgCtrlID()) {
+		CSliderCtrl* slider = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_POS);
+		CString s;
+		s.Format(_T("%d"), slider->GetPos());
+		GetDlgItem(IDC_EDIT_POS)->SetWindowTextW(s);
+
+		double real_pos;
+		ISC_GetRealValueFromDeviceUnit(this->m_hwDlg.serialNo, slider->GetPos(), &real_pos, 0); // 0: distance, 1: velocity, 2:accerleration
+		s.Format(_T("Linear Stage : %.3f [mm]"), real_pos);
+		GetDlgItem(IDC_STATIC_POS)->SetWindowTextW(s);
 	}
 
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);

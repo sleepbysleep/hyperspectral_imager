@@ -27,12 +27,13 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+public:
 	char serialNo[9] = { 0, };
 	int position = 0;
 	int velocity = 0;
+	int unitStep = 0;
 	bool linearStageOpened = false;
 
-public:
 	virtual BOOL OnInitDialog();
 	CComboBox linearStageList;
 	afx_msg void OnBnClickedButton1();

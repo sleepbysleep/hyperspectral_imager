@@ -1,0 +1,108 @@
+﻿  pch.cpp
+  ChartViewer.cpp
+  CTabHardware.cpp
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(50,13): warning C4477: 'wprintf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'SI_64'
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(50,13): message : consider using '%lld' in the format string
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(50,13): message : consider using '%Id' in the format string
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(50,13): message : consider using '%I64d' in the format string
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(205,17): warning C4996: 'mbstowcs': This function or variable may be unsafe. Consider using mbstowcs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(206,17): warning C4996: 'mbstowcs': This function or variable may be unsafe. Consider using mbstowcs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(207,17): warning C4996: 'mbstowcs': This function or variable may be unsafe. Consider using mbstowcs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\HSI_2\HyperImager\CTabHardware.cpp(237,5): warning C4996: 'wcstombs': This function or variable may be unsafe. Consider using wcstombs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  CTabHyperCube.cpp
+C:\Users\HSI_2\HyperImager\CTabHyperCube.cpp(65,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.h(27,1): warning C4005: 'UINT8_MAX': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\intsafe.h(182): message : see previous definition of 'UINT8_MAX'
+  CTabStream.cpp
+C:\Users\HSI_2\HyperImager\CTabStream.cpp(124,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\CTabStream.cpp(128,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\CTabStream.cpp(269,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\CTabStream.cpp(288,27): warning C4018: '<': signed/unsigned mismatch
+  HyperImager.cpp
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uACBD' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uACE0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB300' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uD654' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC0C1' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC790' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB97C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB9CC' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB4E4' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC9C0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uBABB' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uD588' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC73C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uBBC0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB85C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC751' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC6A9' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uD504' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uADF8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB7A8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC774' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC608' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uAE30' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uCE58' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC54A' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uAC8C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uC885' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB8CC' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB429' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB2C8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(89,25): warning C4566: character represented by universal-character-name '\uB2E4' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uACBD' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uACE0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB300' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uD654' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC0C1' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC790' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC5D0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC11C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uCEE8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uD2B8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB864' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC744' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC0AC' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC6A9' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uD558' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB294' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC6B0' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB97C' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC218' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uD589' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uD560' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC5C6' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uC2B5' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB2C8' cannot be represented in the current code page (1252)
+C:\Users\HSI_2\HyperImager\HyperImager.cpp(90,25): warning C4566: character represented by universal-character-name '\uB2E4' cannot be represented in the current code page (1252)
+  HyperImagerDlg.cpp
+C:\Users\HSI_2\HyperImager\envi.h(27,1): warning C4005: 'UINT8_MAX': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\intsafe.h(182): message : see previous definition of 'UINT8_MAX'
+C:\Users\HSI_2\HyperImager\HyperImagerDlg.cpp(181,46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  PictureCtrl.cpp
+  Generating Code...
+  envi.c
+C:\Users\HSI_2\HyperImager\envi.c(33,1): warning C4005: 'strncasecmp': macro redefinition
+C:\Users\HSI_2\HyperImager\envi.c(28): message : see previous definition of 'strncasecmp'
+C:\Users\HSI_2\HyperImager\envi.c(169,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\HSI_2\HyperImager\envi.c(194,30): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+C:\Users\HSI_2\HyperImager\envi.c(201,32): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+C:\Users\HSI_2\HyperImager\envi.c(244,22): warning C4013: 'strtoul' undefined; assuming extern returning int
+C:\Users\HSI_2\HyperImager\envi.c(264,30): warning C4013: 'atoi' undefined; assuming extern returning int
+C:\Users\HSI_2\HyperImager\envi.c(307,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.c(318,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.c(223,20): warning C4101: 's': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(371,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.c(338,28): warning C4101: 'bands': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(338,12): warning C4101: 'samples': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(337,29): warning C4101: 'ep': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(337,8): warning C4101: 'buf': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(338,21): warning C4101: 'lines': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(337,20): warning C4101: 's': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(337,24): warning C4101: 'sp': unreferenced local variable
+C:\Users\HSI_2\HyperImager\envi.c(477,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\HSI_2\HyperImager\envi.c(480,46): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\HSI_2\HyperImager\envi.c(547,2): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.c(548,2): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HSI_2\HyperImager\envi.c(549,2): warning C4018: '<': signed/unsigned mismatch
+  HyperImager.vcxproj -> C:\Users\HSI_2\HyperImager\x64\Debug\HyperImager.exe

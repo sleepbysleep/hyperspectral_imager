@@ -61,4 +61,11 @@ public:
 	afx_msg void OnDeltaposSpinExp(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposSpinPos(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	CSliderCtrl linearStagePosSlider;
+	CEdit linearStagePosEdit;
+	CSpinButtonCtrl linearStagePosSpin;
+	CSliderCtrl cameraExpSlider;
+	CEdit cameraExpEdit;
+	CSpinButtonCtrl cameraExpSpin;
+	CStatic linearStagePosStatic;
 };

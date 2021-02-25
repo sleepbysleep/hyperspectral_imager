@@ -2,13 +2,54 @@
 //
 
 #pragma warning(suppress : 4996)
+#pragma comment( lib, "SpecSensor" )
 
 #include "pch.h"
 #include "HyperImager.h"
 #include "CTabHardware.h"
 #include "afxdialogex.h"
 
+#include <SI_sensor.h>
+#include <SI_errors.h>
+
 #include <Thorlabs.MotionControl.IntegratedStepperMotors.h>
+
+#include "HyperImagerDlg.h"
+
+#include <exception>
+
+// VIS/NIR Camera resource
+#define LICENSE_PATH L"C:/Users/Public/Documents/Specim/SpecSensor.lic"
+#define VISNIR_CAMERA_NAME _T("FX17e with Pleora")
+static SI_H g_hDevice = 0;
+
+int SI_IMPEXP_CONV FeatureCallback1(SI_H Hndl, SI_WC* Feature, void* Context)
+{
+    if (wcscmp(Feature, L"Camera.ExposureTime") == 0) {
+        wprintf(L"FeatureCallback1: Camera.ExposureTime\n");
+    } else if (wcscmp(Feature, L"Camera.FrameRate") == 0) {
+        wprintf(L"FeatureCallback1: Camera.FrameRate\n");
+    }
+
+    return 0;
+}
+
+
+int SI_IMPEXP_CONV FeatureCallback2(SI_H Hndl, SI_WC* Feature, void* Context)
+{
+    if (wcscmp(Feature, L"Camera.ExposureTime") == 0) {
+        wprintf(L"FeatureCallback2: Camera.ExposureTime\n");
+    }
+
+    return 0;
+}
+
+
+int SI_IMPEXP_CONV onDataCallback(SI_U8* _pBuffer, SI_64 _nFrameSize, SI_64 _nFrameNumber, void* _pContext)
+{
+    wprintf(L"%d ", _nFrameNumber);
+    return 0;
+}
 
 // CTabHardware dialog
 
@@ -25,8 +66,10 @@ CTabHardware::~CTabHardware()
     if (this->linearStageOpened) {
         // stop polling
         ISC_StopPolling(this->serialNo);
+        Sleep(POLLING_MS);
         // close device
         ISC_Close(this->serialNo);
+        Sleep(POLLING_MS);
     }
 }
 
@@ -52,6 +95,87 @@ BOOL CTabHardware::OnInitDialog()
     CDialogEx::OnInitDialog();
 
     // TODO:  Add extra initialization here
+    // Scan the camera on the system
+    int nError = siNoError;
+    SI_64 nDeviceCount = 0;
+    SI_WC szDeviceName[4096];
+    SI_WC szDeviceDescription[4096];
+
+    int cameraIndex = -1;
+    CString s, ss;
+
+    // Load SpecSensor and get the device count
+    SI_CHK(SI_Load(LICENSE_PATH));
+    SI_CHK(SI_GetInt(SI_SYSTEM, L"DeviceCount", &nDeviceCount));
+
+    // Iterate through each devices to print their name and description
+    for (int n = 0; n < nDeviceCount; n++) {
+        SI_CHK(SI_GetEnumStringByIndex(SI_SYSTEM, L"DeviceName", n, szDeviceName, 4096));
+        SI_CHK(SI_GetEnumStringByIndex(SI_SYSTEM, L"DeviceDescription", n, szDeviceDescription, 4096));
+        if (wcscmp(szDeviceName, VISNIR_CAMERA_NAME) == 0) {
+            s.Format(_T("Vis/NIR Camera - Device : %d/%d, Name: %s, Description: %s \n"), n, nDeviceCount, szDeviceName, szDeviceDescription);
+            cameraIndex = n;
+            break;
+        }
+    }
+
+    SI_U8* pFrameBuffer = 0;
+    SI_64 nBufferSize = 0;
+    SI_64 nFrameSize = 0;
+    SI_64 nFrameNumber = 0;
+
+    if (cameraIndex != -1) {
+        // Opens the camera handle
+        SI_CHK(SI_Open(cameraIndex, &g_hDevice));
+        SI_CHK(SI_Command(g_hDevice, L"Initialize"));
+
+        // Sets frame rate and exposure
+        SI_CHK(SI_SetFloat(g_hDevice, L"Camera.FrameRate", 25.0));
+        SI_CHK(SI_SetFloat(g_hDevice, L"Camera.ExposureTime", 3.0));
+
+        // Creates a buffer to receive the frame data
+        SI_CHK(SI_GetInt(g_hDevice, L"Camera.Image.SizeBytes", &nBufferSize));
+        SI_CHK(SI_CreateBuffer(g_hDevice, nBufferSize, (void**)&pFrameBuffer));
+
+        // Starts the acquisition, acquires 100 frames and stops the acquisition
+        SI_CHK(SI_Command(g_hDevice, L"Acquisition.Start"));
+
+        for (int n = 0; n < 100; n++) {
+            SI_CHK(SI_Wait(g_hDevice, pFrameBuffer, &nFrameSize, &nFrameNumber, 1000));
+            // Do something interesting with the frame pointer (pFrameBuffer)
+            ss.Format(L"Frame number: %d\n", nFrameNumber);
+            s += ss;
+        }
+
+        SI_CHK(SI_Command(g_hDevice, L"Acquisition.Stop"));
+
+        SI_CHK(SI_RegisterFeatureCallback(g_hDevice, L"Camera.FrameRate", FeatureCallback1, 0));
+        SI_CHK(SI_RegisterFeatureCallback(g_hDevice, L"Camera.ExposureTime", FeatureCallback1, 0));
+        SI_CHK(SI_RegisterFeatureCallback(g_hDevice, L"Camera.ExposureTime", FeatureCallback2, 0));
+        SI_CHK(SI_RegisterDataCallback(g_hDevice, onDataCallback, 0));
+
+        //wprintf(L"Start acquisition");
+        //SI_CHK(SI_Command(g_hDevice, L"Acquisition.Start"));
+
+        //wprintf(L"Stop acquisition");
+        //SI_CHK(SI_Command(g_hDevice, L"Acquisition.Stop"));
+    }
+
+Error:
+    if (SI_FAILED(nError)) {
+        ss.Format(L"Error loading Camera: %s\n", SI_GetErrorString(nError));
+        s += ss;
+    }
+    GetDlgItem(IDC_STATIC_STAGE)->SetWindowTextW(s);
+
+    // Cleanups the buffer, closes the camera and unloads SpecSensor
+    if (pFrameBuffer != 0) SI_DisposeBuffer(g_hDevice, pFrameBuffer);
+    if (g_hDevice != 0) SI_Close(g_hDevice);
+
+    // Unload the library
+    SI_CHK(SI_Unload());
+
+    // Scan the linear stage on the system
     if (TLI_BuildDeviceList() == 0) {
         // get device list size 
         short n = TLI_GetDeviceListSize();
@@ -116,81 +240,111 @@ void CTabHardware::OnBnClickedButton1()
     if (ISC_Open(this->serialNo) == 0) {
         this->linearStageList.EnableWindow(FALSE);
         GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+        Sleep(POLLING_MS);
+
+        try {
+            if (!ISC_LoadSettings(this->serialNo)) {
+                MessageBox(_T("Fail to Load Setting of it!"), _T("System Error"), MB_ICONHAND | MB_ICONSTOP | MB_ICONERROR);
+                return;
+            }
+        }
+        catch (const std::exception* e) {
+            s.Format(_T("%s"), e->what());
+            MessageBox(s, _T("System Error"), MB_ICONHAND | MB_ICONSTOP | MB_ICONERROR);
+            return;
+        }
+        Sleep(POLLING_MS);
 
         // start the device polling at 200ms intervals
         ISC_StartPolling(this->serialNo, POLLING_MS);
         Sleep(POLLING_MS);
 
-        ISC_LoadSettings(this->serialNo);
-        Sleep(1000);
-
         ISC_RequestPosition(this->serialNo);
         Sleep(POLLING_MS);
 
         CString s1, s2;
+       
+        int pos = ISC_GetPosition(this->serialNo); // in mm
+        Sleep(POLLING_MS);
+        int min_pos = ISC_GetStageAxisMinPos(this->serialNo); // in DeviceUnits
+        Sleep(POLLING_MS);
+        int max_pos = ISC_GetStageAxisMaxPos(this->serialNo); // in DeviceUnits
+        Sleep(POLLING_MS);
 
-        int pos = ISC_GetPosition(this->serialNo);
-        {
-            double minPos, maxPos;
-            ISC_GetMotorTravelLimits(this->serialNo, &minPos, &maxPos);
-            s1.Format(_T("TravelLimit: %f <--- %d ---> %f"), minPos, pos, maxPos);
-        }
+        double min_real_pos, max_real_pos, real_pos;
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, pos, &real_pos, 0);
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, min_pos, &min_real_pos, 0); // 0: distance, 1: velocity, 2:acceleration
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, max_pos, &max_real_pos, 0); // 0: distance, 1: velocity, 2:accerleration
 
-        {
-            int maxPos = ISC_GetStageAxisMaxPos(this->serialNo);
-            int minPos = ISC_GetStageAxisMinPos(this->serialNo);
-            s2.Format(_T("StageAxisMinMax: %d <--- %d ---> %d"), minPos, pos, maxPos);
-        }
-        GetDlgItem(IDC_STATIC_STAGE)->SetWindowTextW(s1+_T("\n")+s2);
+        double minPos, maxPos; // in RealWorldUnit (i.e. unit of mm or degree)
+        ISC_GetMotorTravelLimits(this->serialNo, &minPos, &maxPos); // this is perfect
+        assert(min_real_pos == minPos && max_real_pos == maxPos);
 
+        ISC_GetDeviceUnitFromRealValue(this->serialNo, 0.5 /* mm */, &this->unitStep, 0);
 
-        // Show massage to confirm selected device has been Opened
-        /*
-        CString vs;
-        WORD messageType;
-        WORD messageId;
-        DWORD messageData;
+        CHyperImagerDlg* parent = (CHyperImagerDlg*)this->GetParent();
+        s.Format(_T("Linear Stage : %d [mm]"), pos);
+        parent->linearStagePosStatic.SetWindowTextW(s);
 
-        wchar_t wcs_serialNo[9];
-        mbstowcs(wcs_serialNo, serialNo, 9);
-        vs.Format(_T("Device = '%s', is Opened..."), wcs_serialNo);
-        GetDlgItem(IDC_STATIC_STAGE)->SetWindowTextW(vs);
+        parent->linearStagePosSlider.SetRange(min_pos, max_pos);
+        //parent->linearStagePosSlider.SetRange(min_real_pos, max_real_pos);
+        parent->linearStagePosSlider.SetPos(pos);
+        parent->linearStagePosSlider.EnableWindow(TRUE);
 
-        Sleep(500);
-        vs.Format(_T("Homing device = '%s', Please Wait..."), wcs_serialNo);
-        GetDlgItem(IDC_STATIC_STAGE)->SetWindowTextW(vs);
+        s.Format(_T("%d"), pos);
+        parent->linearStagePosEdit.SetWindowTextW(s);
+        parent->linearStagePosSpin.EnableWindow(TRUE);
 
-        ISC_ClearMessageQueue(this->serialNo);
-        ISC_Home(this->serialNo);
-
-        // wait for homing
-        ISC_WaitForMessage(this->serialNo, &messageType, &messageId, &messageData);
-        while (messageType != 2 || messageId != 0)
-        {
-            ISC_WaitForMessage(this->serialNo, &messageType, &messageId, &messageData);
-        }
-
-        vs.Format(_T("Device = '%s', is Homed Successfully"), wcs_serialNo);
-        GetDlgItem(IDC_STATIC_STAGE)->SetWindowTextW(vs);
-        */
-        //
 
         // Setup the parameter of linear stage
         unsigned long home_velocity = ISC_GetHomingVelocity(this->serialNo);
         s.Format(_T("%d"), home_velocity);
         GetDlgItem(IDC_EDIT_HOME_V)->SetWindowTextW(s);
 
+        double home_real_velocity;
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, home_velocity, &home_real_velocity, 1); // 0: distance, 1: velocity, 2:acceleration
+        s.Format(_T("%.3f [mm/s]"), home_real_velocity);
+        GetDlgItem(IDC_STATIC_HOME_V)->SetWindowTextW(s);
+
         // TODO: uncomment to set up the homing velocity
+
+        /*
+        GetDlgItem(IDC_STATIC_HOME_V)->EnableWindow(TRUE);
+        CString my_real_home_vel;
+        IDC_STATIC_HOME_V.GetWindowText(my_real_home_vel); // read string from editbox
+        char* pEnd;
+        double my_real_home_vel_d = strtod(my_real_home_vel.GetBuffer(my_real_home_vel.GetLength()), &pEnd); // convert CString to double
+        my_real_home_vel.ReleaseBuffer();
+
+        int my_dev_home_vel_unit;
+        ISC_GetDeviceUnitFromRealValue(this->serialNo, my_real_home_vel_d, &my_dev_home_vel_unit, 1);
+        ISC_SetHomingVelocity(this->serialNo, my_dev_home_vel_unit);
+        */
+
         //ISC_SetHomingVelocity(this->serialNo, 43980465);
 
-        // 
-        int maxVelocity, currentAcceleration;
-        ISC_GetVelParams(this->serialNo, &currentAcceleration, &maxVelocity);
-        s.Format(_T("%d"), currentAcceleration);
+        // to find out maximum acceration and velocity of the stage, we should perhaps try ISC_GetMotorVelocityLimits (in realWorld units)
+        int max_velocity, current_acc; // max_velocity is same as device real_velocity
+        ISC_GetVelParams(this->serialNo, &current_acc, &max_velocity);
+        s.Format(_T("%d"), current_acc);
         GetDlgItem(IDC_EDIT_ACC)->SetWindowTextW(s);
-        s.Format(_T("%d"), maxVelocity);
+
+        double real_acc;
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, current_acc, &real_acc, 2); // 0: distance, 1: velocity, 2:acceleration
+        s.Format(_T("%.3f [mm/s^2]"), real_acc);
+        GetDlgItem(IDC_STATIC_ACC)->SetWindowTextW(s);
+
+        s.Format(_T("%d"), max_velocity);
         GetDlgItem(IDC_EDIT_VELOCITY)->SetWindowTextW(s);
 
+        double real_velocity;
+        ISC_GetRealValueFromDeviceUnit(this->serialNo, max_velocity, &real_velocity, 1); // 0: distance, 1: velocity, 2:acceleration
+        s.Format(_T("%.3f [mm/s]"), real_velocity);
+        GetDlgItem(IDC_STATIC_VELOCITY)->SetWindowTextW(s);
+
+        /*CString m1;
+        m1.Format(_T("Position : %d [mm]  Velocity : %f [mm/s]  Acceleration : %f [mm/s^2]"), pos, real_velocity, real_acc);// position, velocity and Acceleration units okay
+        MessageBox(m1);*/
         
         GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
         this->linearStageOpened = true;
@@ -261,10 +415,9 @@ void CTabHardware::OnBnClickedButton2()
     WORD messageType;
     WORD messageId;
     DWORD messageData;
-    ISC_WaitForMessage(this->serialNo, &messageType, &messageId, &messageData);
-    while (messageType != 2 || messageId != 0) {
+    do {
         ISC_WaitForMessage(this->serialNo, &messageType, &messageId, &messageData);
-    }
+    } while (messageType != 2 || messageId != 0);
 }
 
 
@@ -272,4 +425,3 @@ void CTabHardware::OnBnClickedButton3()
 {
     // TODO: Add your control notification handler code here
 }
-

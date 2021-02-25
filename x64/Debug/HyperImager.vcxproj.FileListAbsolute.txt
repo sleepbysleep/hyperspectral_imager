@@ -1,0 +1,2 @@
+C:\Users\HSI_2\HyperImager\x64\Debug\HyperImager.exe
+C:\Users\HSI_2\HyperImager\x64\Debug\HyperImager.pdb
